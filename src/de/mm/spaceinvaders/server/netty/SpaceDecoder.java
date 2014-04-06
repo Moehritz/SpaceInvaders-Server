@@ -1,4 +1,4 @@
-package de.mm.spaceinvaders.server;
+package de.mm.spaceinvaders.server.netty;
 
 import java.util.List;
 
@@ -9,11 +9,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-public class SpaceDecoder extends ByteToMessageDecoder {
+public class SpaceDecoder extends ByteToMessageDecoder
+{
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, ByteBuf buf,
-			List<Object> out) throws Exception {
+	protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out)
+			throws Exception
+	{
 		int packetID = buf.readInt();
 
 		Packet packet = Protocol.prot.createPacket(packetID);
