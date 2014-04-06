@@ -14,7 +14,7 @@ public class PacketWrapper
 
 	public void release()
 	{
-		buf.release();
+		//buf.release();
 	}
 
 }

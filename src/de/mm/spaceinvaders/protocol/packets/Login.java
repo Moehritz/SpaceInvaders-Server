@@ -3,12 +3,14 @@ package de.mm.spaceinvaders.protocol.packets;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import io.netty.buffer.ByteBuf;
 import de.mm.spaceinvaders.protocol.Packet;
 import de.mm.spaceinvaders.server.netty.PacketHandler;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Login extends Packet
 {

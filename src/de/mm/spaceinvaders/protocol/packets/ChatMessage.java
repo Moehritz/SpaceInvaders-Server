@@ -4,11 +4,13 @@ import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import de.mm.spaceinvaders.protocol.Packet;
 import de.mm.spaceinvaders.server.netty.PacketHandler;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class ChatMessage extends Packet
 {

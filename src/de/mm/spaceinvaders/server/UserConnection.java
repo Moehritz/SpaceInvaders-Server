@@ -16,8 +16,8 @@ public class UserConnection extends PacketHandler
 	@Override
 	public void connected(Channel ch) throws Exception
 	{
-		// TODO Auto-generated method stub
-		super.connected(ch);
+		player = new Player();
+		this.ch = ch;
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class UserConnection extends PacketHandler
 	@Override
 	public String toString()
 	{
-		return player.getName();
+		return player == null ? "mäh" : player.getName();
 	}
 
 }

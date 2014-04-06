@@ -16,6 +16,10 @@ public class SpaceDecoder extends ByteToMessageDecoder
 	protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out)
 			throws Exception
 	{
+		if (buf.readableBytes() < 8)
+		{
+			return;
+		}
 		int packetID = buf.readInt();
 
 		Packet packet = Protocol.prot.createPacket(packetID);

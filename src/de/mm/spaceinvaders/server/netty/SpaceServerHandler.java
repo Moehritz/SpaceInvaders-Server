@@ -2,6 +2,7 @@ package de.mm.spaceinvaders.server.netty;
 
 import lombok.NonNull;
 import de.mm.spaceinvaders.protocol.PacketWrapper;
+import de.mm.spaceinvaders.server.UserConnection;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -14,9 +15,11 @@ public class SpaceServerHandler extends ChannelHandlerAdapter
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception
 	{
+		System.out.println("Connected");
+		handler = new UserConnection();
 		handler.connected(ctx.channel());
 	}
-	
+
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception
 	{
@@ -27,6 +30,7 @@ public class SpaceServerHandler extends ChannelHandlerAdapter
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception
 	{
+		System.out.println("Packet received");
 		PacketWrapper p = (PacketWrapper) msg;
 		try
 		{
