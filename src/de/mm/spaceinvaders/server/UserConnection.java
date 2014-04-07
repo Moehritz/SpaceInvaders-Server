@@ -3,6 +3,7 @@ package de.mm.spaceinvaders.server;
 import io.netty.channel.Channel;
 import de.mm.spaceinvaders.SpaceInvaders;
 import de.mm.spaceinvaders.logic.Player;
+import de.mm.spaceinvaders.protocol.packets.ChangeName;
 import de.mm.spaceinvaders.protocol.packets.ChatMessage;
 import de.mm.spaceinvaders.protocol.packets.Login;
 import de.mm.spaceinvaders.server.netty.PacketHandler;
@@ -39,9 +40,17 @@ public class UserConnection extends PacketHandler
 	}
 
 	@Override
+	public void handle(ChangeName changeName) throws Exception
+	{
+		System.out.println(player.getName() + " Ã¤ndert seinen Namen zu "
+				+ changeName.getName());
+		player.setName(changeName.getName());
+	}
+
+	@Override
 	public String toString()
 	{
-		return player == null ? "mäh" : player.getName();
+		return player == null ? "muh" : player.getName();
 	}
 
 }

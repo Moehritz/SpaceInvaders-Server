@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import de.mm.spaceinvaders.protocol.packets.ChangeName;
 import de.mm.spaceinvaders.protocol.packets.ChatMessage;
 import de.mm.spaceinvaders.protocol.packets.Login;
 
@@ -20,6 +21,7 @@ public class Protocol
 
 		packets.put(0, ChatMessage.class);
 		packets.put(1, Login.class);
+		packets.put(2, ChangeName.class);
 	}
 
 	public Packet createPacket(int id)
