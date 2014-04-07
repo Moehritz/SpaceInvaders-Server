@@ -1,8 +1,8 @@
-package de.mm.spaceinvaders.server.netty;
+package de.mm.spaceinvaders.server;
 
 import lombok.NonNull;
+import de.mm.spaceinvaders.io.PacketHandler;
 import de.mm.spaceinvaders.protocol.PacketWrapper;
-import de.mm.spaceinvaders.server.UserConnection;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 

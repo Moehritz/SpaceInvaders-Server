@@ -1,9 +1,8 @@
 package de.mm.spaceinvaders.server;
 
+import de.mm.spaceinvaders.io.SpaceDecoder;
+import de.mm.spaceinvaders.io.SpaceEncoder;
 import de.mm.spaceinvaders.protocol.Protocol;
-import de.mm.spaceinvaders.server.netty.SpaceDecoder;
-import de.mm.spaceinvaders.server.netty.SpaceEncoder;
-import de.mm.spaceinvaders.server.netty.SpaceServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;

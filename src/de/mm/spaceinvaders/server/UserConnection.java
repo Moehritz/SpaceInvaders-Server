@@ -1,56 +1,64 @@
 package de.mm.spaceinvaders.server;
 
+import lombok.Getter;
+import lombok.Setter;
 import io.netty.channel.Channel;
 import de.mm.spaceinvaders.SpaceInvaders;
-import de.mm.spaceinvaders.logic.Player;
+import de.mm.spaceinvaders.io.PacketHandler;
+import de.mm.spaceinvaders.protocol.Packet;
+import de.mm.spaceinvaders.protocol.Protocol;
 import de.mm.spaceinvaders.protocol.packets.ChangeName;
 import de.mm.spaceinvaders.protocol.packets.ChatMessage;
 import de.mm.spaceinvaders.protocol.packets.Login;
-import de.mm.spaceinvaders.server.netty.PacketHandler;
 
+@Getter
+@Setter
 public class UserConnection extends PacketHandler
 {
 
-	private Player player;
+	private String name = "_unknown";
 	private Channel ch;
 
 	@Override
 	public void connected(Channel ch) throws Exception
 	{
-		player = new Player();
 		this.ch = ch;
 	}
 
 	@Override
 	public void handle(Login login) throws Exception
 	{
-		if (login.getVersion() != SpaceInvaders.getProtocolVersion())
+		setName(login.getName());
+		if (login.getVersion() != Protocol.PROTOCOL_VERSION)
 		{
+			System.out.println(getName() + " was disconnected. Wrong Protocol version");
 			ch.close();
+			return;
 		}
-		player.setName(login.getName());
-		player.login();
-		System.out.println(player.getName() + " logged in.");
+		SpaceInvaders.getInstance().login(this);
 	}
 
 	@Override
 	public void handle(ChatMessage chatMessage) throws Exception
 	{
-		System.out.println(player.getName() + ": " + chatMessage.getMessage());
+		SpaceInvaders.getInstance().chat(this, chatMessage.getMessage());
 	}
 
 	@Override
 	public void handle(ChangeName changeName) throws Exception
 	{
-		System.out.println(player.getName() + " ändert seinen Namen zu "
-				+ changeName.getName());
-		player.setName(changeName.getName());
+		SpaceInvaders.getInstance().changeName(this, changeName.getName());
 	}
 
 	@Override
 	public String toString()
 	{
-		return player == null ? "muh" : player.getName();
+		return name;
+	}
+
+	public void send(Packet... packet)
+	{
+		ch.writeAndFlush(packet);
 	}
 
 }

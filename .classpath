@@ -4,5 +4,6 @@
 	<classpathentry kind="lib" path="lib/lombok.jar"/>
 	<classpathentry kind="lib" path="lib/netty.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre7"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SpaceInvaders-Protocol"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
