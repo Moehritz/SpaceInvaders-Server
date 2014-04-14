@@ -2,7 +2,6 @@ package de.mm.spaceinvaders.server;
 
 import lombok.Getter;
 import lombok.Setter;
-import io.netty.channel.Channel;
 import de.mm.spaceinvaders.SpaceInvaders;
 import de.mm.spaceinvaders.io.PacketHandler;
 import de.mm.spaceinvaders.protocol.Packet;
@@ -10,19 +9,19 @@ import de.mm.spaceinvaders.protocol.Protocol;
 import de.mm.spaceinvaders.protocol.packets.ChangeName;
 import de.mm.spaceinvaders.protocol.packets.ChatMessage;
 import de.mm.spaceinvaders.protocol.packets.Login;
+import de.mm.spaceinvaders.protocol.packets.UpdatePosition;
 
 @Getter
 @Setter
-public class UserConnection extends PacketHandler
+public class ServerPacketHandler extends PacketHandler
 {
-
 	private String name = "_unknown";
-	private Channel ch;
+	private String uuid = "";
 
 	@Override
-	public void connected(Channel ch) throws Exception
+	public void connected() throws Exception
 	{
-		this.ch = ch;
+		
 	}
 
 	@Override
@@ -32,7 +31,7 @@ public class UserConnection extends PacketHandler
 		if (login.getVersion() != Protocol.PROTOCOL_VERSION)
 		{
 			System.out.println(getName() + " was disconnected. Wrong Protocol version");
-			ch.close();
+			getConnection().close();
 			return;
 		}
 		SpaceInvaders.getInstance().login(this);
@@ -51,6 +50,19 @@ public class UserConnection extends PacketHandler
 	}
 
 	@Override
+	public void handle(UpdatePosition pos) throws Exception
+	{
+		for (ServerPacketHandler c : SpaceInvaders.getInstance().getConnectedPlayers())
+		{
+			if (c == this)
+			{
+				continue;
+			}
+			//c.send(pos);
+		}
+	}
+
+	@Override
 	public String toString()
 	{
 		return name;
@@ -58,7 +70,6 @@ public class UserConnection extends PacketHandler
 
 	public void send(Packet... packet)
 	{
-		ch.writeAndFlush(packet);
+		getConnection().write(packet);
 	}
-
 }
