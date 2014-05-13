@@ -2,6 +2,7 @@ package de.mm.spaceinvaders.server;
 
 import de.mm.spaceinvaders.io.ConnectionHandler;
 import de.mm.spaceinvaders.io.PipelineInitiator;
+import de.mm.spaceinvaders.logic.Game;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -30,13 +31,12 @@ public class ServerConnectionHandler implements Runnable
 		b.channel(NioServerSocketChannel.class);
 		b.childHandler(new ChannelInitializer<SocketChannel>()
 		{
-
 			@Override
 			protected void initChannel(SocketChannel channel) throws Exception
 			{
 				PipelineInitiator.initPipeline(channel.pipeline());
 				channel.pipeline().addLast(
-						new ConnectionHandler(channel, new ServerPacketHandler()));
+						new ConnectionHandler(channel, new UserConnection()));
 			}
 		});
 		ChannelFuture f;
@@ -52,13 +52,24 @@ public class ServerConnectionHandler implements Runnable
 				{
 					if (!future.isSuccess())
 					{
-						System.out.println("Fail :(");
+						System.out.println("Failed to start server. Exiting now");
+						eventLoops.shutdownGracefully();
+
 						System.exit(0);
+					}
+					else
+					{
+						System.out.println("Listening to port " + port);
+						System.out.println("Starting game...");
+						new Game();
+						System.out.println("The server is running, you can play now.");
 					}
 				}
 			});
 
 			f.channel().closeFuture().sync();
+			eventLoops.shutdownGracefully();
+			System.out.println("Netty shutdown complete");
 		}
 		catch (InterruptedException e)
 		{
