@@ -21,17 +21,23 @@ public class ServerPacketHandler extends PacketHandler
 	@Override
 	public void connected() throws Exception
 	{
-		
+	}
+
+	@Override
+	public void disconnected() throws Exception
+	{
+		SpaceInvaders.getInstance().logout(this);
 	}
 
 	@Override
 	public void handle(Login login) throws Exception
 	{
 		setName(login.getName());
+		setUuid(login.getUuid());
 		if (login.getVersion() != Protocol.PROTOCOL_VERSION)
 		{
 			System.out.println(getName() + " was disconnected. Wrong Protocol version");
-			getConnection().close();
+			getConnection().closeConnection();
 			return;
 		}
 		SpaceInvaders.getInstance().login(this);
@@ -58,7 +64,7 @@ public class ServerPacketHandler extends PacketHandler
 			{
 				continue;
 			}
-			//c.send(pos);
+			c.send(pos);
 		}
 	}
 
@@ -70,6 +76,6 @@ public class ServerPacketHandler extends PacketHandler
 
 	public void send(Packet... packet)
 	{
-		getConnection().write(packet);
+		getConnection().sendPackets(packet);
 	}
 }

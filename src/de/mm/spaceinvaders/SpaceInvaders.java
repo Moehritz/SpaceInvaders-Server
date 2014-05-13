@@ -7,6 +7,7 @@ import de.mm.spaceinvaders.protocol.Packet;
 import de.mm.spaceinvaders.protocol.Protocol;
 import de.mm.spaceinvaders.protocol.packets.ChatMessage;
 import de.mm.spaceinvaders.protocol.packets.GameStart;
+import de.mm.spaceinvaders.protocol.packets.UpdatePlayerName;
 import de.mm.spaceinvaders.protocol.packets.UserJoin;
 import de.mm.spaceinvaders.protocol.packets.UserLeave;
 import de.mm.spaceinvaders.server.Server;
@@ -34,7 +35,7 @@ public class SpaceInvaders
 	{
 		connectedPlayers = new ArrayList<>();
 
-		Server.startServer(7654);;
+		Server.startServer(8888);
 	}
 
 	public void login(ServerPacketHandler serverPacketHandler)
@@ -45,15 +46,13 @@ public class SpaceInvaders
 				+ " hat das Spiel betreten.");
 		System.out.println("> " + serverPacketHandler.getName()
 				+ " hat das Spiel betreten.");
-		Packet start = new GameStart();
-		serverPacketHandler.send(start);
+		connectedPlayers.add(serverPacketHandler);
 		for (ServerPacketHandler u : connectedPlayers)
 		{
-			u.send(login);
-			u.send(chat);
+			u.send(login, chat);
 			serverPacketHandler.send(new UserJoin(u.getName(), u.getUuid()));
 		}
-		connectedPlayers.add(serverPacketHandler);
+		System.out.println(serverPacketHandler.getUuid());
 	}
 
 	public void logout(ServerPacketHandler con)
@@ -65,8 +64,7 @@ public class SpaceInvaders
 		System.out.println("> " + con.getName() + " hat die Verbindung getrennt.");
 		for (ServerPacketHandler u : connectedPlayers)
 		{
-			u.send(logout);
-			u.send(chat);
+			u.send(logout, chat);
 		}
 	}
 
@@ -81,11 +79,17 @@ public class SpaceInvaders
 
 	public void changeName(ServerPacketHandler con, String newName)
 	{
-		logout(con);
+		Packet chat = new ChatMessage("> " + con.getName() + " hat sich in " + newName
+				+ " umbenannt.");
+		Packet rename = new UpdatePlayerName(con.getUuid(), newName);
 
+		for (ServerPacketHandler c : connectedPlayers)
+		{
+			c.send(chat, rename);
+		}
 		con.setName(newName);
 
-		login(con);
+		con.send(new GameStart());
 	}
 
 }
