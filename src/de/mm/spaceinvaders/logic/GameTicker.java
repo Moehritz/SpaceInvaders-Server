@@ -21,7 +21,7 @@ public class GameTicker
 			@Override
 			public void run()
 			{
-				run();
+				runTick();
 			}
 		}, 0, 1000 / tps);
 	}
@@ -31,12 +31,24 @@ public class GameTicker
 		if (timer != null) timer.cancel();
 	}
 
-	public void run()
+	public void runTick()
 	{
 		long thisFrame = System.currentTimeMillis();
 		long delta = thisFrame - last;
 		last = thisFrame;
-		List<Entity> allEntities = new ArrayList<>(Game.getCurrentGame().getEntities());
+		Game g = Game.getCurrentGame();
+		synchronized (g.getOutstandingSpawns())
+		{
+			for (Entity e : g.getOutstandingSpawns())
+			{
+				if (!g.getEntities().contains(e)) g.getEntities().add(e);
+			}
+			if (g.getOutstandingSpawns().size() != 0)
+				System.out.println(g.getOutstandingSpawns().size()
+						+ " Entities wurden gespawnt.");
+			g.getOutstandingSpawns().clear();
+		}
+		List<Entity> allEntities = new ArrayList<>(g.getEntities());
 		for (Entity e : allEntities)
 		{
 			boolean out = e.update(delta);
@@ -44,7 +56,6 @@ public class GameTicker
 			{
 				e.despawn();
 			}
-
 		}
 	}
 }

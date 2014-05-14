@@ -63,6 +63,7 @@ public class SpaceInvaders
 
 	public void logout(UserConnection con)
 	{
+		if (!connectedPlayers.contains(con)) return;
 		connectedPlayers.remove(con);
 		Packet logout = new UserLeave(con.getName());
 		Packet chat = new ChatMessage("> " + con.getName()
@@ -71,15 +72,6 @@ public class SpaceInvaders
 		for (UserConnection u : connectedPlayers)
 		{
 			u.send(logout, chat);
-		}
-	}
-
-	public void chat(UserConnection con, String message)
-	{
-		Packet packet = new ChatMessage(con.getName() + ": " + message);
-		for (UserConnection u : connectedPlayers)
-		{
-			u.send(packet);
 		}
 	}
 
@@ -96,9 +88,11 @@ public class SpaceInvaders
 			}
 		}
 
-		Packet chat = new ChatMessage("> " + con.getName() + " hat sich in " + newName
-				+ " umbenannt.");
+		ChatMessage chat = new ChatMessage("> " + con.getName() + " hat sich in "
+				+ newName + " umbenannt.");
 		Packet rename = new UpdatePlayerName(con.getUuid(), newName);
+
+		System.out.println(chat.getMessage());
 
 		for (UserConnection c : connectedPlayers)
 		{

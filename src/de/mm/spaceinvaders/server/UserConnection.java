@@ -54,6 +54,7 @@ public class UserConnection extends PacketHandler
 	{
 		new Game();
 		Packet chat = new ChatMessage(getName() + " hat das Spiel neugestartet!");
+		System.out.println(getName() + " hat das Spiel neugestartet!");
 		for (UserConnection uc : SpaceInvaders.getInstance().getConnectedPlayers())
 		{
 			uc.send(chat);
@@ -84,11 +85,13 @@ public class UserConnection extends PacketHandler
 	{
 		Packet join = new JoinGame(getUuid());
 		Packet chat = new ChatMessage(getName() + " tritt dem Kampf bei!");
-		send(new GameStart(), chat);
+		System.out.println(getName() + " tritt dem Kampf bei!");
+		send(Game.getCurrentGame().getRespawnPacket(), chat);
 		for (Player p : Game.getCurrentGame().getPlayers())
 		{
 			p.getConnnection().send(join, chat);
-			send(new JoinGame(p.getUuid()));
+			System.out.println("Sende Kampfnachricht an " + p.getName() + "...");
+			if (!p.getUuid().equals(getUuid())) send(new JoinGame(p.getUuid()));
 		}
 		Game.getCurrentGame().prepareSpawn(new Player(this, Game.getCurrentGame()));
 	}

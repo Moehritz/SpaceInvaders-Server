@@ -2,8 +2,11 @@ package de.mm.spaceinvaders.logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import de.mm.spaceinvaders.SpaceInvaders;
+import de.mm.spaceinvaders.protocol.Packet;
+import de.mm.spaceinvaders.protocol.packets.Respawn;
 import de.mm.spaceinvaders.server.UserConnection;
 import lombok.Getter;
 
@@ -27,17 +30,29 @@ public class Game
 		if (currentGame != null) currentGame.ticker.stop();
 		currentGame = this;
 
+		System.out.println("! Lade Spiel...");
 		ticker = new GameTicker();
 		for (UserConnection uc : SpaceInvaders.getInstance().getConnectedPlayers())
 		{
 			Player p = new Player(uc, this);
+			System.out.println("! Füge " + p.getName() + " zum Spiel hinzu.");
 			entities.add(p);
 		}
-		System.out.println(entities.size() + " players are in the game.");
+		System.out.println("! " + entities.size() + " sind in dem Spiel.");
 
-		ticker.run();
+		ticker.start();
 
-		System.out.println("New Game started.");
+		System.out.println("Neues Spiel gestartet.");
+	}
+
+	public Packet getRespawnPacket()
+	{
+		Respawn r = new Respawn();
+		Random rand = new Random();
+		r.setX(rand.nextInt(WIDTH - 100) + 50);
+		r.setY(rand.nextInt(WIDTH - 100) + 50);
+		r.setRotation(rand.nextInt(360));
+		return r;
 	}
 
 	public Player getPlayer(String name)
