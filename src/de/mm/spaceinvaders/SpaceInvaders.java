@@ -40,7 +40,7 @@ public class SpaceInvaders
 		connectedPlayers = new ArrayList<>();
 
 		System.out.println("Starting server...");
-		new Thread(new ServerConnectionHandler(8888)).start();
+		new Thread(new ServerConnectionHandler(25565)).start();
 	}
 
 	public void login(UserConnection serverPacketHandler)
@@ -56,8 +56,6 @@ public class SpaceInvaders
 			u.send(login, chat);
 			serverPacketHandler.send(new UserJoin(u.getName(), u.getUuid()));
 		}
-		serverPacketHandler.send(new UserJoin(serverPacketHandler.getName(),
-				serverPacketHandler.getUuid()));
 		connectedPlayers.add(serverPacketHandler);
 	}
 

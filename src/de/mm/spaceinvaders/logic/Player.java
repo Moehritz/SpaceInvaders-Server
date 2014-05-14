@@ -28,8 +28,9 @@ public class Player extends Entity
 	{
 		this.ammo = ammo;
 	}
-	
-	public String getName() {
+
+	public String getName()
+	{
 		return getConnnection().getName();
 	}
 
