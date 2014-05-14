@@ -84,6 +84,7 @@ public class UserConnection extends PacketHandler
 	{
 		Packet join = new JoinGame(getUuid());
 		Packet chat = new ChatMessage(getName() + " tritt dem Kampf bei!");
+		send(new GameStart(), chat);
 		for (Player p : Game.getCurrentGame().getPlayers())
 		{
 			p.getConnnection().send(join, chat);

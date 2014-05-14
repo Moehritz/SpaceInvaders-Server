@@ -6,7 +6,6 @@ import java.util.List;
 import de.mm.spaceinvaders.protocol.Packet;
 import de.mm.spaceinvaders.protocol.Protocol;
 import de.mm.spaceinvaders.protocol.packets.ChatMessage;
-import de.mm.spaceinvaders.protocol.packets.GameStart;
 import de.mm.spaceinvaders.protocol.packets.UpdatePlayerName;
 import de.mm.spaceinvaders.protocol.packets.UserJoin;
 import de.mm.spaceinvaders.protocol.packets.UserLeave;
@@ -52,13 +51,14 @@ public class SpaceInvaders
 				+ " hat das Spiel betreten.");
 		System.out.println("> " + serverPacketHandler.getName()
 				+ " hat das Spiel betreten.");
-		connectedPlayers.add(serverPacketHandler);
 		for (UserConnection u : connectedPlayers)
 		{
 			u.send(login, chat);
 			serverPacketHandler.send(new UserJoin(u.getName(), u.getUuid()));
 		}
-		System.out.println(serverPacketHandler.getUuid());
+		serverPacketHandler.send(new UserJoin(serverPacketHandler.getName(),
+				serverPacketHandler.getUuid()));
+		connectedPlayers.add(serverPacketHandler);
 	}
 
 	public void logout(UserConnection con)
@@ -105,7 +105,5 @@ public class SpaceInvaders
 			c.send(chat, rename);
 		}
 		con.setName(newName);
-
-		con.send(new GameStart());
 	}
 }
