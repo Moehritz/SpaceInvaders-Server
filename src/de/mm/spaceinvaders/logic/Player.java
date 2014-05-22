@@ -22,6 +22,7 @@ public class Player extends Entity
 	{
 		super(con.getUuid(), game);
 		this.connnection = con;
+		setType((byte) 1);
 	}
 
 	public void setAmmo(int ammo)

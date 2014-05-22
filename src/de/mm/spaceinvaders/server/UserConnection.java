@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import de.mm.spaceinvaders.SpaceInvaders;
 import de.mm.spaceinvaders.io.PacketHandler;
+import de.mm.spaceinvaders.logic.Bullet;
 import de.mm.spaceinvaders.logic.Game;
 import de.mm.spaceinvaders.logic.Player;
 import de.mm.spaceinvaders.protocol.Packet;
@@ -11,10 +12,11 @@ import de.mm.spaceinvaders.protocol.Protocol;
 import de.mm.spaceinvaders.protocol.packets.ChangeName;
 import de.mm.spaceinvaders.protocol.packets.ChatMessage;
 import de.mm.spaceinvaders.protocol.packets.GameStart;
-import de.mm.spaceinvaders.protocol.packets.JoinGame;
 import de.mm.spaceinvaders.protocol.packets.Login;
 import de.mm.spaceinvaders.protocol.packets.ResetGame;
+import de.mm.spaceinvaders.protocol.packets.ShootProjectile;
 import de.mm.spaceinvaders.protocol.packets.UpdatePosition;
+import de.mm.spaceinvaders.util.Util;
 
 @Getter
 @Setter
@@ -83,17 +85,25 @@ public class UserConnection extends PacketHandler
 	@Override
 	public void handle(GameStart start) throws Exception
 	{
-		Packet join = new JoinGame(getUuid());
 		Packet chat = new ChatMessage(getName() + " tritt dem Kampf bei!");
 		System.out.println(getName() + " tritt dem Kampf bei!");
 		send(Game.getCurrentGame().getRespawnPacket(), chat);
 		for (Player p : Game.getCurrentGame().getPlayers())
 		{
-			p.getConnnection().send(join, chat);
-			System.out.println("Sende Kampfnachricht an " + p.getName() + "...");
-			if (!p.getUuid().equals(getUuid())) send(new JoinGame(p.getUuid()));
+			p.getConnnection().send(chat);
 		}
 		Game.getCurrentGame().prepareSpawn(new Player(this, Game.getCurrentGame()));
+	}
+
+	@Override
+	public void handle(ShootProjectile projectile) throws Exception
+	{
+		Bullet b = new Bullet(Game.getCurrentGame());
+		b.setX(projectile.getX());
+		b.setY(projectile.getY());
+		b.setRotation(projectile.getRotation());
+		b.setSpeed(Util.calcVectorFromDegrees(b.getRotation()).normalize());
+		Game.getCurrentGame().prepareSpawn(b);
 	}
 
 	@Override

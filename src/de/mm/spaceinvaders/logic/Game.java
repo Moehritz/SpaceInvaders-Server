@@ -80,4 +80,9 @@ public class Game
 	{
 		if (!outstandingSpawns.contains(e)) outstandingSpawns.add(e);
 	}
+
+	public void prepareDespawn(Entity e)
+	{
+		if (entities.contains(e)) outstandingSpawns.add(e);
+	}
 }

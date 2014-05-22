@@ -16,10 +16,13 @@ public class Entity
 	@NonNull
 	private final String uuid;
 
-	private float x = 200, y = 200, health, width, height;
+	private float width, height;
+	private double x;
+	private double y;
 	private double rotation = 0;
 	private Vector speed = new Vector();
 	private boolean visible = true;
+	private byte type = 0;
 
 	private Game game;
 
@@ -42,9 +45,9 @@ public class Entity
 		switch (side)
 		{
 		case 0:
-			return y + height / 2 > 10;// Display.getHeight();
+			return y + height / 2 > Game.HEIGHT;// Display.getHeight();
 		case 1:
-			return x + width / 2 > 10;// Display.getWidth();
+			return x + width / 2 > Game.WIDTH;// Display.getWidth();
 		case 2:
 			return y - height / 2 < 0;
 		case 3:
@@ -75,9 +78,6 @@ public class Entity
 			ret = false;
 		}
 
-		// SpaceInvaders.getInstance().getClient()
-		// .write(new UpdatePosition(uuid, x, y, rotation));
-
 		if (speed.getX() < 0.01 && speed.getX() > -0.01) speed.setX(0);
 		if (speed.getY() < 0.01 && speed.getY() > -0.01) speed.setY(0);
 		return ret;
@@ -85,6 +85,6 @@ public class Entity
 
 	public void despawn()
 	{
-		game.prepareSpawn(this);
+		game.prepareDespawn(this);
 	}
 }
