@@ -16,7 +16,7 @@ public class Entity
 	@NonNull
 	private final String uuid;
 
-	private float width, height;
+	private double width, height;
 	private double x;
 	private double y;
 	private double rotation = 0;
@@ -45,13 +45,13 @@ public class Entity
 		switch (side)
 		{
 		case 0:
-			return y + height / 2 > Game.HEIGHT;// Display.getHeight();
+			return y + height / 2d > 1;// Display.getHeight();
 		case 1:
-			return x + width / 2 > Game.WIDTH;// Display.getWidth();
+			return x + width / 2d > 1;// Display.getWidth();
 		case 2:
-			return y - height / 2 < 0;
+			return y - height / 2d < 0;
 		case 3:
-			return x - width / 2 < 0;
+			return x - width / 2d < 0;
 		}
 		return false;
 	}
@@ -59,27 +59,18 @@ public class Entity
 	public boolean update(long delta)
 	{
 		boolean ret = true;
-		if ((!outOfBounds(1) && speed.getX() > 0)
-				|| (!outOfBounds(3) && speed.getX() < 0))
-		{
-			x += speed.getX() * (double) delta;
-		}
-		else
-		{
-			ret = false;
-		}
-		if ((!outOfBounds(0) && speed.getY() > 0)
-				|| (!outOfBounds(2) && speed.getY() < 0))
-		{
-			y += speed.getY() * (double) delta;
-		}
-		else
+		if ((outOfBounds(1) && speed.getX() > 0) || (outOfBounds(3) && speed.getX() < 0)
+				|| (outOfBounds(0) && speed.getY() > 0)
+				|| (outOfBounds(2) && speed.getY() < 0))
 		{
 			ret = false;
 		}
 
-		if (speed.getX() < 0.01 && speed.getX() > -0.01) speed.setX(0);
-		if (speed.getY() < 0.01 && speed.getY() > -0.01) speed.setY(0);
+		x += speed.getX() * (double) delta;
+		y += speed.getY() * (double) delta;
+
+		if (speed.getX() < 0.0001 && speed.getX() > -0.0001) speed.setX(0);
+		if (speed.getY() < 0.0001 && speed.getY() > -0.0001) speed.setY(0);
 		return ret;
 	}
 

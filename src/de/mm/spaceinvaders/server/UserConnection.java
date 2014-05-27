@@ -102,7 +102,7 @@ public class UserConnection extends PacketHandler
 		b.setX(projectile.getX());
 		b.setY(projectile.getY());
 		b.setRotation(projectile.getRotation());
-		b.setSpeed(Util.calcVectorFromDegrees(b.getRotation()).normalize());
+		b.setSpeed(Util.calcVectorFromDegrees(b.getRotation()).normalize().multiply(0.001));
 		Game.getCurrentGame().prepareSpawn(b);
 	}
 

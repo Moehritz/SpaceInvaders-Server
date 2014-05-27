@@ -12,10 +12,6 @@ import lombok.Getter;
 
 public class Game
 {
-
-	public static int WIDTH = 800;
-	public static int HEIGHT = 600;
-
 	@Getter
 	private static Game currentGame;
 
