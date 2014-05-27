@@ -49,8 +49,8 @@ public class Game
 	{
 		Respawn r = new Respawn();
 		Random rand = new Random();
-		r.setX(rand.nextInt(WIDTH - 100) + 50);
-		r.setY(rand.nextInt(WIDTH - 100) + 50);
+		r.setX(rand.nextDouble());
+		r.setY(rand.nextDouble());
 		r.setRotation(rand.nextInt(360));
 		return r;
 	}
