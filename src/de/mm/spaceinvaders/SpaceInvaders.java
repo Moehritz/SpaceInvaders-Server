@@ -10,7 +10,7 @@ import de.mm.spaceinvaders.protocol.packets.UpdatePlayerName;
 import de.mm.spaceinvaders.protocol.packets.UserJoin;
 import de.mm.spaceinvaders.protocol.packets.UserLeave;
 
-import de.mm.spaceinvaders.server.ServerConnectionHandler;
+import de.mm.spaceinvaders.server.ServerHandler;
 import de.mm.spaceinvaders.server.UserConnection;
 
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class SpaceInvaders
 
 	public static void main(String[] args)
 	{
-		System.out.println("Starting SpaceInvaders Server");
+		System.out.println("Starte SpaceInvaders Server");
 
 		new Protocol();
 		System.out.println("Protocol Version: " + Protocol.PROTOCOL_VERSION);
@@ -39,8 +39,8 @@ public class SpaceInvaders
 	{
 		connectedPlayers = new ArrayList<>();
 
-		System.out.println("Starting server...");
-		new Thread(new ServerConnectionHandler(8888)).start();
+		System.out.println("Starte Netty-Server...");
+		new Thread(new ServerHandler(8888)).start();
 	}
 
 	public void login(UserConnection serverPacketHandler)
@@ -82,8 +82,8 @@ public class SpaceInvaders
 			if (uc.getName().equalsIgnoreCase(newName))
 			{
 				System.out.println(con.getName()
-						+ " tried to give himself a already taken username: \"" + newName
-						+ "\" He has been disconnected.");
+						+ " hat sich versucht falsch umzubenennen: \"" + newName
+						+ "\" Er wurde gekickt.");
 				con.getConnection().closeConnection();
 			}
 		}

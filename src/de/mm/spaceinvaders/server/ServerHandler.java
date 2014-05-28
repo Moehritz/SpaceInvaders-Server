@@ -14,7 +14,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ServerConnectionHandler implements Runnable
+public class ServerHandler implements Runnable
 {
 
 	private final int port;
@@ -52,24 +52,26 @@ public class ServerConnectionHandler implements Runnable
 				{
 					if (!future.isSuccess())
 					{
-						System.out.println("Failed to start server. Exiting now");
+						System.out.println("Fehler beim starten des Servers. Beende...");
+						future.cause().printStackTrace();
+						
 						eventLoops.shutdownGracefully();
 
 						System.exit(0);
 					}
 					else
 					{
-						System.out.println("Listening to port " + port);
-						System.out.println("Starting game...");
+						System.out.println("Höre auf Port " + port);
+						System.out.println("Spiel starten...");
 						new Game();
-						System.out.println("The server is running, you can play now.");
+						System.out.println("Der SpaceInvaders Server ist online! Du kannst jetzt spielen.");
 					}
 				}
 			});
 
 			f.channel().closeFuture().sync();
 			eventLoops.shutdownGracefully();
-			System.out.println("Netty shutdown complete");
+			System.out.println("Netty shutdown");
 		}
 		catch (InterruptedException e)
 		{
