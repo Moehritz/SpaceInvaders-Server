@@ -31,6 +31,8 @@ public class Bullet extends Entity
 				getSpeed());
 		for (Player p : Game.getCurrentGame().getPlayers())
 			p.getConnnection().send(pos);
+		// TODO Playerhit überprüfen
+		// TODO Sender der Rakete einen Punkt geben
 		return ret;
 	}
 
