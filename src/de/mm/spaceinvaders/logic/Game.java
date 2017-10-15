@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import de.mm.spaceinvaders.SpaceInvaders;
+import de.mm.spaceinvaders.SpaceInvadersServer;
 import de.mm.spaceinvaders.protocol.Packet;
 import de.mm.spaceinvaders.protocol.packets.Respawn;
 import de.mm.spaceinvaders.server.UserConnection;
@@ -28,10 +28,10 @@ public class Game
 
 		System.out.println("! Lade Spiel...");
 		ticker = new GameTicker();
-		for (UserConnection uc : SpaceInvaders.getInstance().getConnectedPlayers())
+		for (UserConnection uc : SpaceInvadersServer.getInstance().getConnectedPlayers())
 		{
 			Player p = new Player(uc, this);
-			System.out.println("! Füge " + p.getName() + " zum Spiel hinzu.");
+			System.out.println("! Fï¿½ge " + p.getName() + " zum Spiel hinzu.");
 			entities.add(p);
 		}
 		System.out.println("! " + entities.size() + " sind in dem Spiel.");

@@ -16,11 +16,11 @@ import de.mm.spaceinvaders.server.UserConnection;
 import lombok.Getter;
 
 @Getter
-public class SpaceInvaders
+public class SpaceInvadersServer
 {
 
 	@Getter
-	private static SpaceInvaders instance;
+	private static SpaceInvadersServer instance;
 
 	public static void main(String[] args)
 	{
@@ -29,7 +29,7 @@ public class SpaceInvaders
 		new Protocol();
 		System.out.println("Protocol Version: " + Protocol.PROTOCOL_VERSION);
 
-		instance = new SpaceInvaders();
+		instance = new SpaceInvadersServer();
 		instance.start();
 	}
 
@@ -40,7 +40,7 @@ public class SpaceInvaders
 		connectedPlayers = new ArrayList<>();
 
 		System.out.println("Starte Netty-Server...");
-		new Thread(new ServerHandler(8888)).start();
+		new Thread(new ServerHandler(8889)).start();
 	}
 
 	public void login(UserConnection serverPacketHandler)

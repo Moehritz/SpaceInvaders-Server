@@ -1,8 +1,8 @@
 package de.mm.spaceinvaders.server;
 
+import de.mm.spaceinvaders.SpaceInvadersServer;
 import lombok.Getter;
 import lombok.Setter;
-import de.mm.spaceinvaders.SpaceInvaders;
 import de.mm.spaceinvaders.io.PacketHandler;
 import de.mm.spaceinvaders.logic.Bullet;
 import de.mm.spaceinvaders.logic.Game;
@@ -28,7 +28,7 @@ public class UserConnection extends PacketHandler
 	@Override
 	public void disconnected() throws Exception
 	{
-		SpaceInvaders.getInstance().logout(this);
+		SpaceInvadersServer.getInstance().logout(this);
 	}
 
 	@Override
@@ -42,13 +42,13 @@ public class UserConnection extends PacketHandler
 			getConnection().closeConnection();
 			return;
 		}
-		SpaceInvaders.getInstance().login(this);
+		SpaceInvadersServer.getInstance().login(this);
 	}
 
 	@Override
 	public void handle(ChangeName changeName) throws Exception
 	{
-		SpaceInvaders.getInstance().changeName(this, changeName.getName());
+		SpaceInvadersServer.getInstance().changeName(this, changeName.getName());
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class UserConnection extends PacketHandler
 		new Game();
 		Packet chat = new ChatMessage(getName() + " hat das Spiel neugestartet!");
 		System.out.println(getName() + " hat das Spiel neugestartet!");
-		for (UserConnection uc : SpaceInvaders.getInstance().getConnectedPlayers())
+		for (UserConnection uc : SpaceInvadersServer.getInstance().getConnectedPlayers())
 		{
 			uc.send(chat);
 		}
