@@ -3,12 +3,11 @@ package de.mm.spaceinvaders;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mm.spaceinvaders.logic.Game;
+import de.mm.spaceinvaders.logic.Player;
 import de.mm.spaceinvaders.protocol.Packet;
 import de.mm.spaceinvaders.protocol.Protocol;
-import de.mm.spaceinvaders.protocol.packets.ChatMessage;
-import de.mm.spaceinvaders.protocol.packets.UpdatePlayerName;
-import de.mm.spaceinvaders.protocol.packets.UserJoin;
-import de.mm.spaceinvaders.protocol.packets.UserLeave;
+import de.mm.spaceinvaders.protocol.packets.*;
 
 import de.mm.spaceinvaders.server.ServerHandler;
 import de.mm.spaceinvaders.server.UserConnection;
@@ -51,14 +50,19 @@ public class SpaceInvadersServer
 				+ " hat das Spiel betreten.");
 		System.out.println("> " + serverPacketHandler.getName()
 				+ " hat das Spiel betreten.");
+        serverPacketHandler.send(new Respawn());
+        serverPacketHandler.send(new UserJoin(serverPacketHandler.getName(),
+                serverPacketHandler.getUuid()));
 		for (UserConnection u : connectedPlayers)
 		{
 			u.send(login, chat);
-			serverPacketHandler.send(new UserJoin(u.getName(), u.getUuid()));
+            u.send(new SpawnEntity(serverPacketHandler.getUuid(), 0, 0, 0, (byte) 1));
+            serverPacketHandler.send(new UserJoin(u.getName(), u.getUuid()));
+            serverPacketHandler.send(new SpawnEntity(u.getUuid(), 0, 0, 0, (byte) 1));
 		}
-		serverPacketHandler.send(new UserJoin(serverPacketHandler.getName(),
-				serverPacketHandler.getUuid()));
 		connectedPlayers.add(serverPacketHandler);
+
+        Game.getCurrentGame().prepareSpawn(new Player(serverPacketHandler, Game.getCurrentGame()));
 	}
 
 	public void logout(UserConnection con)

@@ -68,7 +68,7 @@ public class UserConnection extends PacketHandler
 	{
 		for (Player p : Game.getCurrentGame().getPlayers())
 		{
-			if (p.getName().equalsIgnoreCase(getName()))
+			if (p.getUuid().equalsIgnoreCase(getUuid()))
 			{
 				p.setX(pos.getX());
 				p.setY(pos.getY());
